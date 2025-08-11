@@ -19,7 +19,7 @@ const faqs = [
 ];
 
 const FAQs = () => {
-  const [openIndex, setOpenIndex] = useState(-1);
+  const [openIndex, setOpenIndex] = useState(-1); // closed by default
   const [showAll, setShowAll] = useState(false);
   const extraRef = useRef(null);
   const [extraHeight, setExtraHeight] = useState(0);
@@ -51,11 +51,7 @@ const FAQs = () => {
           ))}
 
           {/* Extra FAQs (collapsed by default) */}
-          <div
-            className={`faq-extra ${showAll ? 'open' : ''}`}
-            style={{ maxHeight: extraHeight }}
-            ref={extraRef}
-          >
+          <div className={`faq-extra ${showAll ? 'open' : ''}`} style={{ maxHeight: extraHeight }} ref={extraRef}>
             {tail.map((item, i) => (
               <FaqItem key={`extra-${i}`} idx={firstCount + i} item={item} openIndex={openIndex} toggle={toggle} />
             ))}
@@ -72,21 +68,30 @@ const FAQs = () => {
   );
 };
 
-const FaqItem = ({ idx, item, openIndex, toggle }) => (
-  <div className={`faq-item ${openIndex === idx ? 'open' : ''}`} role="listitem">
-    <button
-      className="faq-question"
-      aria-expanded={openIndex === idx}
-      aria-controls={`faq-panel-${idx}`}
-      onClick={() => toggle(idx)}
-    >
-      <span>{item.q}</span>
-      <span className="faq-icon">{openIndex === idx ? '−' : '+'}</span>
-    </button>
-    <div id={`faq-panel-${idx}`} className="faq-answer" role="region" style={{ maxHeight: openIndex === idx ? '300px' : '0' }}>
-      <p>{item.a}</p>
+const FaqItem = ({ idx, item, openIndex, toggle }) => {
+  const isOpen = openIndex === idx;
+  return (
+    <div className={`faq-item ${isOpen ? 'open' : ''}`} role="listitem">
+      <button
+        className="faq-question"
+        aria-expanded={isOpen}
+        aria-controls={`faq-panel-${idx}`}
+        onClick={() => toggle(idx)}
+      >
+        <span>{item.q}</span>
+        <span className="faq-icon">{isOpen ? '−' : '+'}</span>
+      </button>
+      <div
+        id={`faq-panel-${idx}`}
+        className="faq-answer"
+        role="region"
+        aria-hidden={!isOpen}
+        style={{ maxHeight: isOpen ? '300px' : '0' }}
+      >
+        <p>{item.a}</p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default FAQs;

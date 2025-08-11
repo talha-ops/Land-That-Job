@@ -64,7 +64,9 @@
   .testimonials-grid::-webkit-scrollbar { display: none; }
   .testimonials-grid { scrollbar-width: none; }
   .testimonial-card { flex: 0 0 300px; scroll-snap-align: start; }
-  .carousel-btn { display: none; } /* hide arrows on mobile when swiping */
+  /* Keep arrows visible and closer to edges on mobile */
+  .carousel-btn.prev { left: -10px; }
+  .carousel-btn.next { right: -10px; }
 }
 
 .testimonial-card {
