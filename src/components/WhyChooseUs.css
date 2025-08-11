@@ -8,6 +8,20 @@
   gap: 2rem;
 }
 
+@media (max-width: 768px) {
+  .reasons-grid {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    padding-bottom: 0.5rem;
+  }
+  .reasons-grid::-webkit-scrollbar { display: none; }
+  .reasons-grid { scrollbar-width: none; }
+  .reason-card { flex: 0 0 300px; scroll-snap-align: start; }
+}
+
 .reason-card {
   background: var(--background);
   padding: 2rem;
@@ -57,29 +71,10 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .reasons-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-  }
-  
-  .reason-card {
-    padding: 1.5rem;
-  }
+  .reason-card { padding: 1.5rem; }
 }
 
 @media (max-width: 480px) {
-  .reasons-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .reason-card {
-    padding: 1.25rem;
-  }
-  
-  .reason-icon {
-    width: 60px;
-    height: 60px;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
+  .reason-card { padding: 1.25rem; }
+  .reason-icon { width: 60px; height: 60px; font-size: 1.5rem; margin-bottom: 1rem; }
 }

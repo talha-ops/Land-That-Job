@@ -15,6 +15,21 @@
   }
 }
 
+/* Mobile: single horizontal row with swipe */
+@media (max-width: 768px) {
+  .services-grid {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    padding-bottom: 0.5rem;
+  }
+  .services-grid::-webkit-scrollbar { display: none; }
+  .services-grid { scrollbar-width: none; }
+  .service-card { flex: 0 0 280px; scroll-snap-align: start; }
+}
+
 .service-card {
   background: white;
   padding: 2rem;
@@ -90,13 +105,8 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .services-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  
   .service-card {
-    padding: 1.5rem;
+    padding: 1.5rem; /* slightly smaller padding for fit */
   }
 }
 
