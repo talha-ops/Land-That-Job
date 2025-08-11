@@ -1,0 +1,29 @@
+.about { background: var(--background-secondary); }
+
+.about-content { display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem; align-items: center; }
+
+/* Left visual */
+.about-visual { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 4 / 3; min-height: 320px; background: var(--background); background-size: cover; background-position: center; background-repeat: no-repeat; }
+.about-photo { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(105%); }
+.about-visual-accent { position: absolute; inset: 0; background: radial-gradient(60% 60% at 80% 20%, rgba(59,130,246,0.18), transparent 60%); pointer-events: none; }
+.about-caption { position: absolute; left: 16px; bottom: 16px; background: rgba(15, 23, 42, 0.6); color: #fff; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(6px); }
+.about-caption h4 { margin: 0 0 4px; font-size: 1.05rem; }
+.about-caption p { margin: 0; font-size: 0.9rem; opacity: 0.95; }
+
+/* Right text */
+.about-text p { font-size: 1.05rem; line-height: 1.75; margin-bottom: 1rem; color: var(--text-secondary); }
+.about-text p:last-child { margin-bottom: 0; }
+
+/* Mini expertise cards */
+.expertise-mini { margin-top: 1.25rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+.mini-card { background: var(--background); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.9rem; transition: var(--transition); }
+.mini-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--primary-color); }
+.mini-card h3 { font-size: 1rem; color: var(--text-primary); margin-bottom: 0.35rem; }
+.mini-card p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+
+/* Legacy large grid removed in new layout */
+.expertise-grid { display: none; }
+
+/* Responsive */
+@media (max-width: 992px) { .about-content { grid-template-columns: 1fr; } .about-visual { order: 1; } .about-right { order: 2; } }
+@media (max-width: 600px) { .expertise-mini { grid-template-columns: 1fr 1fr; } }

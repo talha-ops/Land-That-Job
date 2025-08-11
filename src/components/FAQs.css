@@ -1,0 +1,19 @@
+.faqs { background: var(--background); }
+
+.faq-list { display: grid; gap: 0.75rem; }
+
+.faq-item { border: 1px solid var(--border-color); border-radius: 10px; background: var(--background); overflow: hidden; transition: var(--transition); }
+.faq-item.open { border-color: var(--primary-color); box-shadow: var(--shadow); }
+
+.faq-question { width: 100%; text-align: left; padding: 1rem 1.25rem; background: transparent; border: none; color: var(--text-primary); font-weight: 600; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.faq-icon { font-size: 1.25rem; color: var(--primary-color); margin-left: 1rem; }
+
+.faq-answer { padding: 0 1.25rem; transition: max-height 0.3s ease; }
+.faq-answer p { margin: 0 0 1rem; color: var(--text-secondary); padding-right: 1.25rem; }
+
+/* Show more */
+.faq-extra { overflow: hidden; transition: max-height 0.35s ease; }
+
+.faq-actions { text-align: center; margin-top: 1rem; }
+.faq-showmore { background: var(--background-secondary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 0.75rem 1rem; border-radius: 10px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+.faq-showmore:hover { border-color: var(--primary-color); box-shadow: var(--shadow); }
