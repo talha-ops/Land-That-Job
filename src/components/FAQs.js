@@ -70,6 +70,15 @@ const FAQs = () => {
 
 const FaqItem = ({ idx, item, openIndex, toggle }) => {
   const isOpen = openIndex === idx;
+  const panelRef = useRef(null);
+  const [panelMax, setPanelMax] = useState(0);
+
+  useEffect(() => {
+    if (panelRef.current) {
+      setPanelMax(isOpen ? panelRef.current.scrollHeight : 0);
+    }
+  }, [isOpen]);
+
   return (
     <div className={`faq-item ${isOpen ? 'open' : ''}`} role="listitem">
       <button
@@ -86,7 +95,8 @@ const FaqItem = ({ idx, item, openIndex, toggle }) => {
         className="faq-answer"
         role="region"
         aria-hidden={!isOpen}
-        style={{ maxHeight: isOpen ? '300px' : '0' }}
+        style={{ maxHeight: panelMax }}
+        ref={panelRef}
       >
         <p>{item.a}</p>
       </div>

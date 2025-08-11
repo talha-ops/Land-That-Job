@@ -8,7 +8,8 @@
 .faq-question { width: 100%; text-align: left; padding: 1rem 1.25rem; background: transparent; border: none; color: var(--text-primary); font-weight: 600; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
 .faq-icon { font-size: 1.25rem; color: var(--primary-color); margin-left: 1rem; }
 
-.faq-answer { padding: 0 1.25rem; transition: max-height 0.3s ease; }
+/* Collapsed by default */
+.faq-answer { max-height: 0; overflow: hidden; padding: 0 1.25rem; transition: max-height 0.3s ease; }
 .faq-answer p { margin: 0 0 1rem; color: var(--text-secondary); padding-right: 1.25rem; }
 
 /* Show more */
