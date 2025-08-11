@@ -1,9 +1,20 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { FaChevronLeft, FaChevronRight, FaQuoteLeft } from 'react-icons/fa';
 import './Testimonials.css';
 
 const Testimonials = () => {
   const itemsPerSlide = 3;
+  const gridRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const firstJumpDoneRef = useRef(false);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 768);
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const testimonials = useMemo(() => ([
     { name: 'Sarah Johnson', role: 'Marketing Manager', company: 'TechCorp', image: 'https://i.pravatar.cc/150?img=1', text: "Within two weeks of updating my resume and LinkedIn, I received 3 interview invitations and landed my dream job!" },
@@ -28,18 +39,59 @@ const Testimonials = () => {
     { name: 'Henry Adams', role: 'Account Executive', company: 'SalesWorks', image: 'https://i.pravatar.cc/150?img=20', text: "From being ignored to getting responses within days. Huge quality upgrade." }
   ]), []);
 
+  // Desktop slide logic (3 per slide)
   const totalSlides = Math.ceil(testimonials.length / itemsPerSlide);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
+    if (isMobile) return; // disable auto-rotate on mobile
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % totalSlides);
     }, 6000);
     return () => clearInterval(timer);
-  }, [totalSlides]);
+  }, [totalSlides, isMobile]);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  const nextSlide = () => {
+    if (isMobile) {
+      const firstJumpIndex = 4; // 5th testimonial (0-based index 4)
+      let nextIndex;
+      if (!firstJumpDoneRef.current) {
+        nextIndex = firstJumpIndex;
+        firstJumpDoneRef.current = true;
+      } else {
+        nextIndex = (mobileIndex + 1) % testimonials.length;
+      }
+      setMobileIndex(nextIndex);
+      // Smooth scroll to the target card
+      if (gridRef.current) {
+        const container = gridRef.current;
+        const card = container.children[nextIndex];
+        if (card) {
+          const left = card.offsetLeft - 16; // small margin
+          container.scrollTo({ left, behavior: 'smooth' });
+        }
+      }
+      return;
+    }
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  };
+
+  const prevSlide = () => {
+    if (isMobile) {
+      const prevIndex = (mobileIndex - 1 + testimonials.length) % testimonials.length;
+      setMobileIndex(prevIndex);
+      if (gridRef.current) {
+        const container = gridRef.current;
+        const card = container.children[prevIndex];
+        if (card) {
+          const left = card.offsetLeft - 16;
+          container.scrollTo({ left, behavior: 'smooth' });
+        }
+      }
+      return;
+    }
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
 
   const getVisibleTestimonials = () => {
     const startIndex = currentSlide * itemsPerSlide;
@@ -61,19 +113,25 @@ const Testimonials = () => {
           <h2>Client Success Stories</h2>
           <p>Real results from real professionals</p>
         </div>
-
+        
         <div className="testimonials-carousel">
           <button className="carousel-btn prev" onClick={prevSlide} aria-label="Previous testimonials">
             <FaChevronLeft />
           </button>
-
-          <div className="testimonials-grid">
-            {visible.map((t, index) => (
+          
+          <div className="testimonials-grid" ref={gridRef}>
+            {(isMobile ? testimonials : visible).map((t, index) => (
               <div className="testimonial-card" key={`${t.name}-${index}`}>
-                <div className="quote-icon"><FaQuoteLeft /></div>
+                <div className="quote-icon">
+                  <FaQuoteLeft />
+                </div>
                 <p className="testimonial-text">{t.text}</p>
                 <div className="testimonial-author">
-                  <img src={t.image} alt={t.name} className="author-image" />
+                  <img 
+                    src={t.image} 
+                    alt={t.name}
+                    className="author-image"
+                  />
                   <div className="author-info">
                     <h4>{t.name}</h4>
                     <p>{t.role} at {t.company}</p>
@@ -82,22 +140,24 @@ const Testimonials = () => {
               </div>
             ))}
           </div>
-
+          
           <button className="carousel-btn next" onClick={nextSlide} aria-label="Next testimonials">
             <FaChevronRight />
           </button>
         </div>
-
-        <div className="carousel-indicators">
-          {Array.from({ length: totalSlides }).map((_, idx) => (
-            <button
-              key={idx}
-              className={`indicator ${idx === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
+        
+        {!isMobile && (
+          <div className="carousel-indicators">
+            {Array.from({ length: totalSlides }).map((_, idx) => (
+              <button
+                key={idx}
+                className={`indicator ${idx === currentSlide ? 'active' : ''}`}
+                onClick={() => setCurrentSlide(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
